@@ -11,13 +11,14 @@ const userName = adder(output, "input", false, "text", false);
 const userPsw = adder(output, "input", false, "password", false);
 const btn = adder(output, "button", "Login", false, "btn");
 const message = adder(output, "div", ":", false, false);
-userName.value = "Angve";
+userName.value = "Dmitriy";
 userPsw.value = "1234";
+btn.addEventListener("click", checker);
 
 function encry() {
   const url = "data.json";
   fetch(url)
-    .then((res) => res.json())
+    .then((json) => json.json())
     .then((data) => {
       data.forEach((item) => {
         const val = btoa(item.pass);
@@ -26,8 +27,6 @@ function encry() {
       });
     });
 }
-
-btn.addEventListener("click", checker);
 
 function checker(e) {
   if (userName.value.length > 3 && userPsw.value.length > 3) {
@@ -42,14 +41,14 @@ function checker(e) {
       data.forEach((user) => {
         let found = [];
         if (user.user == userName.value) {
-          //   console.log("User Match");
+          //console.log('User Match');
           found[0] = true;
         } else {
           found[0] = false;
         }
-        // let decodedPass = atob(user.value);
-        if (user.pass == userPsw.value) {
-          //   console.log("Password Match");
+        let decodedPass = atob(user.pass);
+        if (decodedPass == userPsw.value) {
+          //console.log('Password Match');
           found[1] = true;
         } else {
           found[1] = false;
@@ -60,8 +59,8 @@ function checker(e) {
         }
       });
       if (okay) {
-        console.log(`${user} Allowed!`);
-        output.innerHTML = `<h2>Welcome ${user}</h2><div>Secret Content</div>`;
+        console.log(`${user} Allowed`);
+        output.innerHTML = `<h2>Welcome ${user}</h2><div> Secret Content</div>`;
       } else {
         message.innerHTML = `${user} Denied!`;
       }
@@ -73,7 +72,7 @@ function checker(e) {
 }
 
 function getList() {
-  const url = "data.json";
+  const url = "datac.json";
   return new Promise((resolve) => {
     fetch(url)
       .then((res) => res.json())
